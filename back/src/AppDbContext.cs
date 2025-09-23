@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OpenCRM.Entities;
 
 namespace OpenCRM;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<OpenCrmUser, OpenCrmRole, string>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

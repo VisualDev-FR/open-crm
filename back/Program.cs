@@ -1,10 +1,12 @@
-using System.IO;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenCRM;
 
+using OpenCRM;
+using OpenCRM.Entities;
+using OpenCRM.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,18 +14,24 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+builder.Services.AddIdentity<OpenCrmUser, OpenCrmRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+
+builder.Services.AddServices();
+builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
-
-    var sql = File.ReadAllText("datas/clients.sql");
-    context.Database.ExecuteSqlRaw(sql);
-}
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
+
+// database seeding
+app.ResetDatabase();
+app.ExecuteSqlFiles("datas/seeding");
+app.GenerateUserSeeds();
+
 app.Run();
