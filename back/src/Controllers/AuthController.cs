@@ -13,11 +13,14 @@ public class AuthController(AuthService authService) : ControllerBase
     {
         var jwt = await authService.LoginAsync(login);
 
-        if (jwt != null)
-        {
-            return Ok(jwt);
-        }
+        return Ok(jwt);
+    }
 
-        return Unauthorized();
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto register)
+    {
+        var jwt = await authService.RegisterAsync(register);
+
+        return Ok(jwt);
     }
 }

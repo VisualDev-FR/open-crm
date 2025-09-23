@@ -8,11 +8,11 @@ namespace OpenCRM.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ClientController : ControllerBase
+public class ContactsController : ControllerBase
 {
     private readonly AppDbContext _context;
 
-    public ClientController(AppDbContext context)
+    public ContactsController(AppDbContext context)
     {
         _context = context;
     }
@@ -21,8 +21,8 @@ public class ClientController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var clients = await _context.Clients.ToListAsync();
+        var contacts = await _context.Contacts.ToListAsync();
 
-        return Ok(clients);
+        return Ok(contacts);
     }
 }
