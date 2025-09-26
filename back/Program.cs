@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OpenCRM;
 using OpenCRM.Entities;
+using OpenCRM.Exceptions;
 using OpenCRM.Extensions;
 using OpenCRM.Options;
 
@@ -27,12 +28,15 @@ builder.Services.AddServices();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseExceptionHandler();
 
 // database seeding
 app.ResetDatabase();
