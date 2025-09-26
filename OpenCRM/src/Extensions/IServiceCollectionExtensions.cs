@@ -15,11 +15,33 @@ public static class IServiceCollectionExtensions
 {
     public static void AddServices(this IServiceCollection service)
     {
-        var serviceTypes = Assembly.GetExecutingAssembly().GetTypes().Where(ServiceAttribute.IsService);
+        var serviceTypes = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(ServiceAttribute.IsService);
 
-        foreach (Type type in serviceTypes)
+        foreach (var t in serviceTypes)
         {
-            service.AddScoped(type);
+            var baseType = t.BaseType;
+            var attr = t.GetCustomAttribute<ServiceAttribute>();
+
+            if (baseType == null || !baseType.IsInterface)
+                throw new NullReferenceException();
+
+            switch (attr!.Lifetime)
+            {
+                case ServiceLifetime.Scoped:
+                    break;
+
+                case ServiceLifetime.Transient:
+                    break;
+
+                case ServiceLifetime.Singleton:
+                    service.AddSingleton(basetype, t);
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Unsuported Lifetime: '{attr.Lifetime}'");
+            }
         }
     }
 

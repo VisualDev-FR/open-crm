@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Identity;
 using OpenCRM.Attributes;
 using OpenCRM.Dtos;
 using OpenCRM.Entities;
+using OpenCRM.Interfaces;
 using OpenCRM.Services;
 
 
-[Service]
-public class AuthService(UserManager<User> userManager, JwtService jwtService)
+[Service<IAuthService>]
+public class AuthService(UserManager<User> userManager, JwtService jwtService) : IAuthService
 {
     public async Task<JwtResponseDto> LoginAsync(LoginRequestDto login)
     {
