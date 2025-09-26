@@ -15,7 +15,7 @@ public class JwtService(IOptions<JwtOptions> _jwtOptions)
 {
     private readonly JwtOptions JwtOptions = _jwtOptions.Value;
 
-    public string GenerateJwtToken(OpenCrmUser user)
+    public string GenerateJwtToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtOptions.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

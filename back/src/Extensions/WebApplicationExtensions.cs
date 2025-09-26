@@ -27,8 +27,8 @@ public static class WebApplicationExtensions
     {
         using (var scope = app.Services.CreateScope())
         {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<OpenCrmUser>>();
-            var adminUser = new OpenCrmUser
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            var adminUser = new User
             {
                 UserName = "admin",
                 Email = "admin@crm.com",

@@ -10,7 +10,7 @@ using OpenCRM.Services;
 
 
 [Service]
-public class AuthService(UserManager<OpenCrmUser> userManager, JwtService jwtService)
+public class AuthService(UserManager<User> userManager, JwtService jwtService)
 {
     public async Task<JwtResponseDto> LoginAsync(LoginRequestDto login)
     {
@@ -30,7 +30,7 @@ public class AuthService(UserManager<OpenCrmUser> userManager, JwtService jwtSer
     {
         string username = await GenerateUsername(register);
 
-        var user = new OpenCrmUser
+        var user = new User
         {
             FirstName = register.FirstName,
             LastName = register.LastName,

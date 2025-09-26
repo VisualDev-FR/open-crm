@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace OpenCRM.Entities;
 
-public class OpenCrmUser : IdentityUser
+public class User : IdentityUser
 {
     public string FirstName { get; set; } = string.Empty;
 

@@ -4,7 +4,7 @@ using OpenCRM.Entities;
 
 namespace OpenCRM;
 
-public class AppDbContext : IdentityDbContext<OpenCrmUser, OpenCrmRole, string>
+public class AppDbContext : IdentityDbContext<User, Role, string>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
