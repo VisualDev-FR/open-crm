@@ -23,6 +23,7 @@ public static class WebApplicationExtensions
             context.Database.EnsureCreated();
         }
     }
+
     public static void GenerateUserSeeds(this WebApplication app)
     {
         using (var scope = app.Services.CreateScope())
