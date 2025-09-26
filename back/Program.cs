@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenCRM;
 using OpenCRM.Entities;
 using OpenCRM.Extensions;
+using OpenCRM.Options;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ builder.Services.AddIdentity<OpenCrmUser, OpenCrmRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+
+builder.MapOptions<JwtOptions>("jwt");
 
 builder.Services.AddServices();
 builder.Services.AddJwtAuthentication(builder.Configuration);

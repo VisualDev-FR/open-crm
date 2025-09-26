@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OpenCRM.Attributes;
+using OpenCRM.Options;
 
 namespace OpenCRM.Extensions;
 
@@ -22,9 +23,9 @@ public static class IServiceCollectionExtensions
         }
     }
 
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        string jwtKey = configuration.SafeGet("Jwt:Key");
+        var jwtOptions = configuration.GetSection("jwt").Get<JwtOptions>();
 
         services.AddAuthentication(options =>
         {
@@ -39,12 +40,10 @@ public static class IServiceCollectionExtensions
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration.SafeGet("Jwt:Issuer"),
-                ValidAudience = configuration.SafeGet("Jwt:Audience"),
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                ValidIssuer = jwtOptions!.Issuer,
+                ValidAudience = jwtOptions!.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions!.SecretKey))
             };
         });
-
-        return services;
     }
 }
